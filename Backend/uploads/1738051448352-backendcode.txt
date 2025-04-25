@@ -1,0 +1,23 @@
+router.post("/", upload.single("pdfFile"), async (req, res) => {
+  // console.log("==============================",req)
+  console.log("==============================",req.file)
+ let path = "C:\Users\User\e-frontend4copy\e-frontend3copy\e-frontend2copy\.vs\e-frontend\Backend"+Date.now() + "-" + req.file.originalname;
+  try {
+    const newOrdinance = new Ordinance({
+      srNo: req.body.srNo,
+      title: req.body.title,
+      draftOrdinanceNo: req.body.draftOrdinanceNo ,
+      draftOrdinanceDate: req.body.draftOrdinanceDate,
+      finalOrdinanceNo: req.body.finalOrdinanceNo,
+      finalOrdinanceDate: req.body.finalOrdinanceDate,
+      dateOfPublication: req.body.dateOfPublication || req.query.dateOfPublication,
+      concernSection: req.body.concernSection,
+      path:path
+    });
+    console.log("==============================>>>",newOrdinance)
+    await newOrdinance.save();
+    res.status(201).json({ message: "Ordinance created successfully", newOrdinance });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to create ordinance" });
+  }
+});
